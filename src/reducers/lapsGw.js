@@ -1,24 +1,25 @@
-import { serviceName as nameA } from '../actions/serviceA';
-import { serviceName as nameB } from '../actions/serviceB';
-import { serviceName as nameC } from '../actions/serviceC';
-
-import * as serviceA from './serviceA';
-import * as serviceB from './serviceB';
-import * as serviceC from './serviceC';
+import * as actionA from '../actions/serviceA';
+import * as actionB from '../actions/serviceB';
+import * as actionC from '../actions/serviceC';
 
 import createViewModels from './viewModelFactory';
 
-// 1. Create ViewModels on the fly
-export const selectLaps = (state, service) => {
-    var data = [];
-
-    if (service === nameA) {
-        data = serviceA.selectLaps(state);
-    } else if (service === nameB) {
-        data = serviceB.selectLaps(state);
-    } else if (service === nameC) {
-        data = serviceC.selectLaps(state);
+const laps = (state = [], action) => {
+    switch (action.type) {
+        case actionA.FETCH_LAPS_SUCCESS:
+            return createViewModels(actionA.serviceName, action.laps);
+        case actionB.FETCH_LAPS_SUCCESS:
+            return createViewModels(actionB.serviceName, action.laps);
+        case actionC.FETCH_LAPS_SUCCESS:
+            return createViewModels(actionC.serviceName, action.laps);
+        default:
+            return state;
     }
-
-    return createViewModels(service, data);
 }
+
+// 2. Create ViewModels one off and keep them in the store
+export const selectLaps = (state) => {
+    return state.laps;
+}
+
+export default laps;
